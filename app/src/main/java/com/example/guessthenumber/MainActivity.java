@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    //random
     public static final String EXTRA_MESSAGE = "com.example.guessthenumber.MESSAGE" ;
 
     private int nGuess, numberTries, n;
