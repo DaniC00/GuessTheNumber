@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private int nGuess, numberTries, n;
     private Button validate;
+    private Button ranking;
     private EditText text;
 
     @Override
@@ -24,6 +25,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         text = (EditText) findViewById(R.id.editText);
         validate = (Button) findViewById(R.id.touchButton);
         validate.setOnClickListener(this);
+        ranking = (Button) findViewById(R.id.touchButtonRanking);
+        ranking.setOnClickListener(this);
 
         newGame();
     }
@@ -34,8 +37,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (view == validate){
             validate();
         }
+        if (view == ranking){
+            ranking();
+        }
     }
 
+
+    private void ranking(){
+        setContentView(R.layout.activity_ranking_activiry);
+
+    }
     //valida si el numero es correcto o no y da pistas.
     private void validate(){
         n = Integer.parseInt(text.getText().toString());
