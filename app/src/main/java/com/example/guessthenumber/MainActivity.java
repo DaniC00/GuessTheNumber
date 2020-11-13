@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import static com.example.guessthenumber.RankingActivity.players;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -119,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
     //randomiza el numero que buscamos y resetea los intentos.
     private void newGame(){
         nGuess = (int)(Math.random()*100)+1;
+        System.out.println(nGuess);
         numberTries = 0;
     }
 
@@ -126,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RankingActivity.class);
 
         if(userName != "") {
+            players.add(new Player(userName, numberTries));
             String message = userName + ',' + numberTries;
             intent.putExtra(EXTRA_MESSAGE, message);
         }
