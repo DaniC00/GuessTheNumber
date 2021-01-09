@@ -3,6 +3,7 @@ package com.example.guessthenumber;
 
 
 import android.media.Image;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             super(itemView);
             nombre = (TextView) itemView.findViewById(R.id.txtNombreContent);
             intentos = (TextView) itemView.findViewById(R.id.txtIntentosContent);
+            miniatura = (ImageView) itemView.findViewById(R.id.profilePicture);
 
         }
 
@@ -59,6 +61,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
             nombre.setText(player.get_name());
             intentos.setText(String.valueOf(player.get_intents()));
+            miniatura.setImageURI(Uri.parse(player.get_imageRoute()));
 
         }
     }

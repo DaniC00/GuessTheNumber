@@ -4,14 +4,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Date;
 
 import static com.example.guessthenumber.RankingActivity.players;
 
@@ -25,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText text;
     private EditText textRanking;
     private Button halloffame;
+
+    private String imageName;
 
     private AlertDialog adRanking;
 
@@ -67,6 +77,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (n==nGuess){
             Toast.makeText(this, "Correct! You found the number " + nGuess +" in "+numberTries + " tries. Let's play again!", Toast.LENGTH_SHORT).show();
+            imageName = generateImageName();
+            System.out.println("imageName:"+imageName);
+            takePhoto();
             rankingDialog();
         }
         else if (n>nGuess){
@@ -104,11 +117,10 @@ public class MainActivity extends AppCompatActivity {
         adRanking.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String userName = textRanking.getText().toString();
                 adRanking.dismiss();
-
                 ranking(userName);
-
                 newGame();
             }
         });
@@ -126,15 +138,59 @@ public class MainActivity extends AppCompatActivity {
     private void ranking(String userName){
         Intent intent = new Intent(this, RankingActivity.class);
 
+        String imageRoute = getFilesDir().getPath() +"/"+ imageName + ".png";
+        System.out.println("ruta:"+imageRoute);
+
+
         if(userName != "") {
-            RankingActivity.players.add(new Player(userName, numberTries));
-            String message = userName + ',' + numberTries;
-            intent.putExtra(EXTRA_MESSAGE, message);
+            RankingActivity.players.add(new Player(userName, numberTries, imageRoute));
+
         }
         startActivity(intent);
 
     }
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
+    private void takePhoto() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        } catch (ActivityNotFoundException e) {
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+            saveImage(imageBitmap);
+        }
+    }
+
+    public void saveImage(Bitmap bitmap) {
+
+        File imageFile = new File(getApplicationContext().getFilesDir(), imageName + ".png");
+        try {
+            FileOutputStream fos = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+            Toast.makeText(getApplicationContext(), "Image saved as " + imageName , Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "ERROR: Can't save the image.", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
+
+    public String generateImageName(){
+
+        Long tsLong = System.currentTimeMillis()/1000;
+        String generatedImageName=tsLong.toString();
+
+        return generatedImageName;
+    }
 
 }

@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import java.util.AbstractSequentialList;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 public class RankingActivity extends AppCompatActivity {
@@ -23,6 +25,8 @@ public class RankingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking);
 
+        sortArrayList();
+
         recycler=(RecyclerView) findViewById(R.id.recyclerId);
         recycler.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
 
@@ -33,4 +37,13 @@ public class RankingActivity extends AppCompatActivity {
     }
 
 
+    private void sortArrayList(){
+        Collections.sort(players, new Comparator<Player>(){
+            @Override
+            public int compare(Player o1, Player o2) {
+                return o1.get_intents() - o2.get_intents();
+            }
+        });
+
+    }
 }
