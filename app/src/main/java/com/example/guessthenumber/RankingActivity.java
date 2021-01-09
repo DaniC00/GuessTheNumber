@@ -41,7 +41,11 @@ public class RankingActivity extends AppCompatActivity {
         Collections.sort(players, new Comparator<Player>(){
             @Override
             public int compare(Player o1, Player o2) {
-                return o1.get_intents() - o2.get_intents();
+                if (o1.get_intents() == o2.get_intents()){
+                    return o1.get_segundos() - o2.get_segundos();
+                } else {
+                    return o1.get_intents() - o2.get_intents();
+                }
             }
         });
 

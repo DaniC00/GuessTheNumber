@@ -13,6 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
@@ -48,12 +50,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         TextView nombre;
         TextView intentos;
         ImageView miniatura;
+        TextView segundos;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             nombre = (TextView) itemView.findViewById(R.id.txtNombreContent);
             intentos = (TextView) itemView.findViewById(R.id.txtIntentosContent);
             miniatura = (ImageView) itemView.findViewById(R.id.profilePicture);
+            segundos = (TextView) itemView.findViewById(R.id.txtSegundosContent);
 
         }
 
@@ -61,6 +65,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
             nombre.setText(player.get_name());
             intentos.setText(String.valueOf(player.get_intents()));
+            segundos.setText(String.valueOf(player.get_segundos()));
             miniatura.setImageURI(Uri.parse(player.get_imageRoute()));
 
         }

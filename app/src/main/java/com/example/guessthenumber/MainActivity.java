@@ -9,10 +9,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText text;
     private EditText textRanking;
     private Button halloffame;
+    private Chronometer simpleChronometer;
+    private int segundos;
 
     private String imageName;
 
@@ -45,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         text = (EditText) findViewById(R.id.editText);
         halloffame = (Button) findViewById(R.id.btnRanking);
+        simpleChronometer = (Chronometer) findViewById(R.id.simpleChronometer);
 
 
         setRankingDialog();
@@ -77,7 +82,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (n==nGuess){
             Toast.makeText(this, "Correct! You found the number " + nGuess +" in "+numberTries + " tries. Let's play again!", Toast.LENGTH_SHORT).show();
+
+            simpleChronometer.stop();
+            segundos = (int) (SystemClock.elapsedRealtime() - simpleChronometer.getBase())/1000;
+
             imageName = generateImageName();
+
             System.out.println("imageName:"+imageName);
             takePhoto();
             rankingDialog();
@@ -129,10 +139,14 @@ public class MainActivity extends AppCompatActivity {
 
     //randomiza el numero que buscamos y resetea los intentos.
     private void newGame(){
+        segundos = 0;
         textRanking.setText("");
         nGuess = (int)(Math.random()*100)+1;
         System.out.println(nGuess);
         numberTries = 0;
+
+        simpleChronometer.setBase(SystemClock.elapsedRealtime());
+        simpleChronometer.start();
     }
 
     private void ranking(String userName){
@@ -143,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         if(userName != "") {
-            RankingActivity.players.add(new Player(userName, numberTries, imageRoute));
+            RankingActivity.players.add(new Player(userName, numberTries, imageRoute, segundos));
 
         }
         startActivity(intent);

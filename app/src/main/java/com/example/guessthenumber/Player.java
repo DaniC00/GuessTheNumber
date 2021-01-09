@@ -7,15 +7,17 @@ public class Player {
     private String _name;
     private int _intents;
     private String _imageRoute;
+    private int _segundos;
 
 
     public Player(){}
 
-    public Player(String _name, int _intents, String imageRoute){
+    public Player(String _name, int _intents, String imageRoute, int segundos){
 
         this._intents=_intents;
         this._name=_name;
         this._imageRoute=imageRoute;
+        this._segundos=segundos;
 
     }
 
@@ -42,4 +44,14 @@ public class Player {
     public void set_imageRoute(String _imageRoute) {
         this._imageRoute = _imageRoute;
     }
+
+    public int get_segundos() {
+        return _segundos;
+    }
+
+    public void set_segundos(int _segundos) {
+        this._segundos = _segundos;
+    }
 }
+
+
