@@ -2,11 +2,13 @@ package com.example.guessthenumber;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         text = (EditText) findViewById(R.id.editText);
         halloffame = (Button) findViewById(R.id.btnRanking);
 
+
         setRankingDialog();
         newGame();
 
@@ -54,8 +57,6 @@ public class MainActivity extends AppCompatActivity {
                 ranking("");
             }
         });
-
-
     }
 
 
@@ -103,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
         adRanking.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String userName = textRanking.getText().toString();
                 adRanking.dismiss();
 
@@ -112,13 +112,12 @@ public class MainActivity extends AppCompatActivity {
                 newGame();
             }
         });
-
-
     }
 
 
     //randomiza el numero que buscamos y resetea los intentos.
     private void newGame(){
+        textRanking.setText("");
         nGuess = (int)(Math.random()*100)+1;
         System.out.println(nGuess);
         numberTries = 0;
@@ -128,12 +127,14 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RankingActivity.class);
 
         if(userName != "") {
-            players.add(new Player(userName, numberTries));
+            RankingActivity.players.add(new Player(userName, numberTries));
             String message = userName + ',' + numberTries;
             intent.putExtra(EXTRA_MESSAGE, message);
         }
         startActivity(intent);
 
     }
+
+
 
 }
